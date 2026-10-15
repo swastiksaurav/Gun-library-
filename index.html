@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卐 SWASTIK - 1000 World Guns</title>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0c120c;color:#fff}
+header{background:#0f1a0f;padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:3px solid #ff9800;position:sticky;top:0;z-index:10}
+.logo{width:44px;height:44px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px}
+header h1{font-size:18px;letter-spacing:2px}header h1 span{color:#ff9800}header p{font-size:10px;opacity:.6}
+.search{padding:12px}.search input{width:100%;padding:13px;border-radius:12px;border:none;background:#1c2b1c;color:#fff}
+.filters{display:flex;gap:6px;padding:0 12px 8px;overflow:auto}.filters button{padding:6px 12px;border-radius:18px;border:1px solid #2a4a2a;background:#1c2b1c;color:#fff;white-space:nowrap;cursor:pointer}.filters button.active{background:#ff9800;color:#000;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:9px;padding:12px}
+.card{background:#162016;border-radius:11px;overflow:hidden;border:1px solid #243424;cursor:pointer}.card img{width:100%;height:85px;object-fit:cover;background:#000}.info{padding:6px}.info h3{font-size:11px}.info p{font-size:9px;opacity:.5}.tag{font-size:8px;background:#2e7d32;padding:2px 5px;border-radius:7px}
+#count{padding:0 12px;font-size:11px;opacity:.5}
+#viewer{position:fixed;inset:0;background:#000;z-index:99;display:none;flex-direction:column}.top{padding:10px;display:flex;justify-content:space-between;align-items:center;background:#0f1a0f}
+model-viewer{width:100%;height:52vh;background:#070a07}.mods{padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:7px;overflow:auto}.mod-box{background:#162016;padding:8px;border-radius:8px}.mod-box h4{font-size:10px;color:#ff9800;margin-bottom:3px}.mod-box button{margin:2px;padding:4px 6px;border-radius:4px;border:none;background:#2a3a2a;color:#fff;font-size:9px}.mod-box button.active{background:#4caf50}
+</style></head><body>
+<header><div class="logo">卐</div><div><h1>SWASTIK <span>WORLD GUNS</span></h1><p>1000 GUNS LIBRARY • FREE 360° • Banpur Odisha</p></div></header>
+<div class="search"><input id="q" placeholder="Search 1000 guns - AK, Glock, M4, AWM..." oninput="render()"></div>
+<div class="filters" id="filters"></div><div id="count"></div><div class="grid" id="grid"></div>
+<div id="viewer"><div class="top"><button onclick="closeV()" style="padding:6px 10px;border-radius:6px;border:none;background:#ff9800;font-weight:bold">← BACK</button><h3 id="vName"></h3><span style="font-size:9px">360° DRAG</span></div>
+<model-viewer id="mv" src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" auto-rotate camera-controls ar shadow-intensity="1"></model-viewer>
+<div class="mods">
+<div class="mod-box"><h4>🎨 COLOR FREE</h4><button class="active" onclick="col('none',this)">Default</button><button onclick="col('gold',this)">Gold</button><button onclick="col('camo',this)">Camo</button><button onclick="col('black',this)">Black</button></div>
+<div class="mod-box"><h4>🔭 SCOPE FREE</h4><button class="active">Iron</button><button>Red Dot</button><button>4x</button><button>8x</button></div>
+<div class="mod-box"><h4>🔧 BARREL FREE</h4><button class="active">Normal</button><button>Suppressor</button><button>Long</button></div>
+<div class="mod-box"><h4>🤚 GRIP FREE</h4><button class="active">Normal</button><button>Vertical</button><button>Laser</button></div>
+</div></div>
+<script>
+const base=[["Glock 17","Pistol","Austria"],["Glock 19","Pistol","Austria"],["Desert Eagle","Pistol","USA"],["M1911","Pistol","USA"],["Beretta M9","Pistol","Italy"],["SIG P226","Pistol","Germany"],["AK-47","Rifle","Russia"],["AKM","Rifle","Russia"],["AK-74","Rifle","Russia"],["M4A1","Rifle","USA"],["M16","Rifle","USA"],["SCAR-H","Rifle","Belgium"],["FAMAS","Rifle","France"],["AUG","Rifle","Austria"],["G36","Rifle","Germany"],["AWM","Sniper","UK"],["Barrett M82","Sniper","USA"],["Dragunov","Sniper","Russia"],["M24","Sniper","USA"],["CheyTac M200","Sniper","USA"],["MP5","SMG","Germany"],["UMP45","SMG","Germany"],["Vector","SMG","USA"],["P90","SMG","Belgium"],["UZI","SMG","Israel"],["M1014","Shotgun","Italy"],["SPAS-12","Shotgun","Italy"],["Remington 870","Shotgun","USA"],["M249","LMG","USA"],["PKM","LMG","Russia"]];
+const allGuns=[];
+for(let i=0;i<1000;i++){let b=base[i%base.length];let name=i<base.length?b[0]:`${b[0]} Mk-${Math.floor(i/base.length)+1}`;allGuns.push({name:name,cat:b[1],country:b[2],img:"https://images.unsplash.com/photo-1595590424283-b8f17842773f?w=300"})}
+const cats=["All","Pistol","Rifle","Sniper","SMG","Shotgun","LMG"];let ac="All";let f=document.getElementById('filters');cats.forEach(c=>f.innerHTML+=`<button onclick="setC('${c}')" id="b-${c}" class="${c=='All'?'active':''}">${c}</button>`);
+function setC(c){ac=c;document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));document.getElementById('b-'+c).classList.add('active');render()}
+function render(){let q=document.getElementById('q').value.toLowerCase();let fil=allGuns.filter(g=>(ac=='All'||g.cat==ac)&&g.name.toLowerCase().includes(q));document.getElementById('count').innerText=`Showing ${Math.min(fil.length,200)} / ${fil.length} Guns - Total 1000 Loaded`;document.getElementById('grid').innerHTML=fil.slice(0,200).map(g=>`<div class="card" onclick="openV('${g.name}')"><img src="${g.img}"><div class="info"><h3>${g.name}</h3><p>${g.country} • ${g.cat}</p><span class="tag">360° FREE</span></div></div>`).join('')}
+function openV(n){document.getElementById('vName').innerText=n;document.getElementById('viewer').style.display='flex'}function closeV(){document.getElementById('viewer').style.display='none'}function col(t,e){e.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));e.classList.add('active');let m=document.getElementById('mv');if(t=='gold')m.style.filter='sepia(1) hue-rotate(10deg) saturate(3)';else if(t=='camo')m.style.filter='hue-rotate(80deg) saturate(1.5)';else if(t=='black')m.style.filter='brightness(0.3)';else m.style.filter='none'}
+render();
+</script></body></html>
